@@ -1,0 +1,24 @@
+*
+# Submodules
+!include/fftwpp
+# Directories
+!include/
+!include/*/
+!src/
+!config/
+!launch/
+!cmake/
+# File extensions
+!*.h
+!*.hpp
+!*.cpp
+!*.yaml
+!*.launch
+!*.cmake
+# Files with specific names
+!README.*
+!Makefile
+!CMakeLists.txt
+!LICENSE.txt
+!package.xml
+!.gitignore

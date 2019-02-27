@@ -1,0 +1,3 @@
+[submodule "include/fftwpp"]
+	path = include/fftwpp
+	url = https://github.com/dealias/fftwpp

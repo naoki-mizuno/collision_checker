@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<launch>
+  <node pkg="collision_checker" type="collision_checker_node" name="collision_checker" >
+    <rosparam command="load" file="$(find collision_checker)/config/params.yaml" />
+  </node>
+</launch>
