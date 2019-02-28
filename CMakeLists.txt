@@ -19,9 +19,9 @@ find_package(FFTW REQUIRED)
 
 find_package(OpenMP)
 if (OPENMP_FOUND)
-    set (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OpenMP_C_FLAGS}")
-    set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
-    set (CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${OpenMP_EXE_LINKER_FLAGS}")
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OpenMP_C_FLAGS}")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
+    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${OpenMP_EXE_LINKER_FLAGS}")
 endif()
 
 catkin_package(
@@ -34,7 +34,6 @@ catkin_package(
 add_library(fftwpp
   include/fftwpp/fftw++.cc include/fftwpp/fftw++.h
 )
-
 target_link_libraries(fftwpp
   ${FFTW_LIBRARIES}
 )
@@ -42,7 +41,6 @@ target_link_libraries(fftwpp
 add_library(convolution
   include/fftwpp/convolution.cc include/fftwpp/convolution.h
 )
-
 target_link_libraries(convolution
   fftwpp
 )
@@ -50,7 +48,6 @@ target_link_libraries(convolution
 add_library(collision_checker
   src/collision_checker.cpp include/collision_checker.h
 )
-
 target_link_libraries(collision_checker
   convolution
   ${Boost_LIBRARIES}
@@ -66,7 +63,6 @@ include_directories(
 add_executable(collision_checker_node
   src/main.cpp
 )
-
 target_link_libraries(collision_checker_node
   collision_checker
   ${Boost_LIBRARIES}
