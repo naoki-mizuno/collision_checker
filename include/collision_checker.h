@@ -45,6 +45,7 @@ public:
 protected:
     nav_msgs::OccupancyGrid original_grid_;
     Array::array2<Complex> array_;
+    std::vector<nav_msgs::OccupancyGrid> cspace_;
 
     geometry_msgs::Polygon robot_;
 

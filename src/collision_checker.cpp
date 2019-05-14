@@ -34,18 +34,28 @@ CollisionChecker::set_grid(const nav_msgs::OccupancyGrid& grid) {
     make_kernel(kernel, 5);
     C.convolve(array_, kernel, true);
 
-    // TODO: Loop for different impulses
-    // Impulses
-    auto impulses = Array::array2<Complex>{2 * mx - 1, my, align};
-    make_impulses(impulses, 10, 2, M_PI / 4);
-    C.convolve(array_, impulses, true);
+    cspace_.resize(144);
+#pragma omp parallel for
+    for (unsigned i = 0; i < 144; i++) {
+        // Copy the convolution of map and kernel
+        auto array_copy = Array::array2<Complex>{2 * mx - 1, my, align};
+        array_copy.Load(array_);
+
+        // Impulses
+        auto impulses = Array::array2<Complex>{2 * mx - 1, my, align};
+        make_impulses(impulses, 10, 2, i * 2 * M_PI / 144);
+        C.convolve(array_copy, impulses, true);
+
+        auto map_new = grid;
+        convert(array_, map_new, map_new.info.width, map_new.info.height);
+        cspace_[i] = map_new;
+        ROS_INFO_STREAM("Finished " << i);
+    }
 
     // TODO: Temporarily publish resulting map
-    auto map_new = grid;
-    convert(array_, map_new, map_new.info.width, map_new.info.height);
     ros::NodeHandle nh;
     auto pub = nh.advertise<nav_msgs::OccupancyGrid>("map_fft", 1, true);
-    pub.publish(map_new);
+    pub.publish(cspace_[0]);
     ros::spinOnce();
 
     auto finish = ros::Time::now();

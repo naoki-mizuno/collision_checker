@@ -13,8 +13,10 @@ cb_map(const nav_msgs::OccupancyGrid& grid) {
 int
 main(int argc, char* argv[]) {
     ros::init(argc, argv, "collision_checker_node");
-    // fftwpp::fftw::maxthreads = static_cast<unsigned>(get_max_threads());
-    // ROS_INFO_STREAM("Num threads : " << fftwpp::fftw::maxthreads);
+    const auto num_threads = omp_get_max_threads();
+    omp_set_num_threads(num_threads);
+    fftwpp::fftw::maxthreads = static_cast<unsigned>(num_threads);
+    ROS_INFO_STREAM("Num threads : " << fftwpp::fftw::maxthreads);
 
     ros::NodeHandle nh;
     const auto sub = nh.subscribe("map", 1, cb_map);
