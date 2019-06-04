@@ -15,8 +15,6 @@ find_package(catkin REQUIRED COMPONENTS
 
 find_package(Boost REQUIRED)
 
-find_package(FFTW REQUIRED)
-
 find_package(OpenMP)
 if (OPENMP_FOUND)
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OpenMP_C_FLAGS}")
@@ -31,25 +29,10 @@ catkin_package(
   nav_msgs
 )
 
-add_library(fftwpp
-  include/fftwpp/fftw++.cc include/fftwpp/fftw++.h
-)
-target_link_libraries(fftwpp
-  ${FFTW_LIBRARIES}
-)
-
-add_library(convolution
-  include/fftwpp/convolution.cc include/fftwpp/convolution.h
-)
-target_link_libraries(convolution
-  fftwpp
-)
-
 add_library(collision_checker
   src/collision_checker.cpp include/collision_checker.h
 )
 target_link_libraries(collision_checker
-  convolution
   ${Boost_LIBRARIES}
   ${catkin_LIBRARIES}
 )
