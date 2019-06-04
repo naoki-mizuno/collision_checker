@@ -86,6 +86,11 @@ bool
 CollisionChecker::is_valid(const double x,
                            const double y,
                            const double theta) {
+    if (grid_.info.resolution == 0 && robot_polygon_.points.empty()) {
+        // TODO: Raise exception?
+        return false;
+    }
+
     const auto res = grid_.info.resolution;
     const auto theta_index = static_cast<unsigned>(theta / config_.theta_resolution);
     const auto& footprint = robot_footprints_[theta_index];

@@ -11,6 +11,7 @@ find_package(catkin REQUIRED COMPONENTS
   roscpp
   geometry_msgs
   nav_msgs
+  message_generation
 )
 
 find_package(Boost REQUIRED)
@@ -21,6 +22,17 @@ if (OPENMP_FOUND)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
     set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${OpenMP_EXE_LINKER_FLAGS}")
 endif()
+
+add_service_files(
+  DIRECTORY srv
+  FILES Check.srv SetConfig.srv
+)
+
+generate_messages(
+  DEPENDENCIES
+  geometry_msgs
+  nav_msgs
+)
 
 catkin_package(
   CATKIN_DEPENDS
