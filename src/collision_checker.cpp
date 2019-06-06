@@ -113,7 +113,13 @@ CollisionChecker::is_valid(const double x,
     // How many cells there are in the footprint
     const auto num_cells = footprint_size_x * footprint_size_y;
 
-#pragma omp parallel for
+    /*
+     * Note: This for loop CAN be executed in parallel. However, it was found
+     * that the overhead of spinning up threads was larger than the benefit.
+     * If, in the future, more sophisticated processing is required within
+     * this loop, using OpenMP to parallelize the process may be a viable
+     * approach.
+     */
     for (unsigned i = 0; i < num_cells; i++) {
         // Number of cells from the bottom-left of the footprint
         const auto c_footprint_x = i % footprint_size_x;
@@ -137,8 +143,12 @@ CollisionChecker::is_valid(const double x,
             if (!config_.allow_unknown) {
                 collision |= grid_.data[idx] == -1;
             }
-#pragma omp atomic
+
             has_collision |= collision;
+
+            if (has_collision) {
+                return false;
+            }
         }
     }
     return !has_collision;
