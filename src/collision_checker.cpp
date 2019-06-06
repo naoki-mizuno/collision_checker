@@ -265,6 +265,7 @@ CollisionChecker::make_footprints() {
         }
     }
 
+#pragma omp parallel for
     for (unsigned i = 0; i < robot_footprints_.size(); i++) {
         const auto theta = config_.theta_resolution * i;
         make_footprint(robot_polygon_, theta, robot_footprints_[i]);
