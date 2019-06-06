@@ -57,7 +57,7 @@ CollisionChecker::set_robot(const geometry_msgs::Polygon& robot,
 
 void
 CollisionChecker::set_config(const Config& config) {
-    // Reconstruct robot footprints if necessary
+    // Reconstruct robot footprints if theta resolution was updated
     if (config.theta_resolution != config_.theta_resolution) {
         config_.theta_resolution = config.theta_resolution;
         if (grid_.info.resolution != 0 && !robot_polygon_.points.empty()) {
