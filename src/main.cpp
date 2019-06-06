@@ -34,13 +34,13 @@ struct CheckerNode {
     bool
     set_config(collision_checker::SetConfig::Request& req,
                collision_checker::SetConfig::Response& res) {
-        cc_.set_robot(req.robot);
-
         auto c = msp::CollisionChecker::Config{};
         c.theta_resolution = req.theta_resolution;
         c.allow_unknown = req.allow_unknown;
         c.occupancy_threshold = req.occupancy_threshold;
         cc_.set_config(c);
+
+        cc_.set_robot(req.robot);
 
         return true;
     }
