@@ -28,7 +28,7 @@
 namespace msp {
 class CollisionChecker {
 public:
-    using Index = std::pair<unsigned, unsigned>;
+    using Index = std::pair<int, int>;
 
     /**
      *         Y

@@ -92,7 +92,9 @@ CollisionChecker::is_valid(const double x,
     }
 
     const auto res = grid_.info.resolution;
-    const auto theta_index = static_cast<unsigned>(theta / config_.theta_resolution);
+    // Theta in the range [0, 2 * M_PI)
+    const auto norm_theta = theta < 0 ? theta + 2 * M_PI : theta;
+    const auto theta_index = static_cast<unsigned>(norm_theta / config_.theta_resolution);
     const auto& footprint = robot_footprints_[theta_index];
     const auto footprint_size_x = footprint.size();
     const auto footprint_size_y = footprint.front().size();
