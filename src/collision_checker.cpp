@@ -126,15 +126,20 @@ CollisionChecker::is_valid(const double x,
             continue;
         }
 
-        const auto idx = c_y * grid_.info.width + c_x;
-        bool collision = grid_.data[idx] > config_.occupancy_threshold;
-        // Unknown grid is considered occupied
-        if (!config_.allow_unknown) {
-            collision |= grid_.data[idx] == -1;
+        // If the point in footprint goes out of map, it's invalid
+        if (c_x < 0 || c_y < 0 || c_x >= grid_.info.width || c_y >= grid_.info.height) {
+            has_collision = true;
         }
-
+        else {
+            const auto idx = c_y * grid_.info.width + c_x;
+            bool collision = grid_.data[idx] > config_.occupancy_threshold;
+            // Unknown grid is considered occupied
+            if (!config_.allow_unknown) {
+                collision |= grid_.data[idx] == -1;
+            }
 #pragma omp atomic
-        has_collision |= collision;
+            has_collision |= collision;
+        }
     }
     return !has_collision;
 }
