@@ -92,9 +92,13 @@ CollisionChecker::is_valid(const double x,
     }
 
     const auto res = grid_.info.resolution;
+    // Theta in the range [-M_PI, M_PI)
+    auto norm_theta = std::remainder(theta, 2 * M_PI);
     // Theta in the range [0, 2 * M_PI)
-    const auto norm_theta = theta < 0 ? theta + 2 * M_PI : theta;
-    const auto theta_index = static_cast<unsigned>(norm_theta / config_.theta_resolution);
+    norm_theta = norm_theta < 0 ? norm_theta + 2 * M_PI : norm_theta;
+    const auto theta_index = static_cast<unsigned>(
+        std::round(norm_theta / config_.theta_resolution)
+    );
     const auto& footprint = robot_footprints_[theta_index];
     const auto footprint_size_x = footprint.size();
     const auto footprint_size_y = footprint.front().size();
@@ -158,7 +162,13 @@ nav_msgs::OccupancyGrid
 CollisionChecker::get_footprint(const double x,
                                 const double y,
                                 const double theta) {
-    const auto theta_index = static_cast<unsigned>(theta / config_.theta_resolution);
+    // Theta in the range [-M_PI, M_PI)
+    auto norm_theta = std::remainder(theta, 2 * M_PI);
+    // Theta in the range [0, 2 * M_PI)
+    norm_theta = norm_theta < 0 ? norm_theta + 2 * M_PI : norm_theta;
+    const auto theta_index = static_cast<unsigned>(
+        std::round(norm_theta / config_.theta_resolution)
+    );
     const auto& footprint = robot_footprints_[theta_index];
 
     auto grid = nav_msgs::OccupancyGrid{};
