@@ -40,7 +40,15 @@ struct CheckerNode {
         c.occupancy_threshold = req.occupancy_threshold;
         cc_.set_config(c);
 
+#ifdef _OPENMP
+        ROS_INFO_STREAM("Num threads: " << omp_get_max_threads());
+#endif
+        auto start = ros::Time::now();
+
         cc_.set_robot(req.robot);
+
+        const auto dt = (ros::Time::now() - start).toSec() * 1e6;
+        ROS_INFO_STREAM("Preprocessing done: " << dt << " us");
 
         return true;
     }
@@ -51,7 +59,13 @@ struct CheckerNode {
         const auto pose = req.pose;
 
         res.footprint = cc_.get_footprint(pose);
+
+        auto start = ros::Time::now();
+
         res.is_valid = cc_.is_valid(pose);
+
+        const auto dt = (ros::Time::now() - start).toSec() * 1e6;
+        ROS_INFO_STREAM("Pose check done: " << dt << " us");
 
         return true;
     }
