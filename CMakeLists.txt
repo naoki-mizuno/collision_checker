@@ -11,11 +11,10 @@ find_package(catkin REQUIRED COMPONENTS
   roscpp
   geometry_msgs
   nav_msgs
+  message_generation
 )
 
 find_package(Boost REQUIRED)
-
-find_package(FFTW REQUIRED)
 
 find_package(OpenMP)
 if (OPENMP_FOUND)
@@ -24,6 +23,17 @@ if (OPENMP_FOUND)
     set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${OpenMP_EXE_LINKER_FLAGS}")
 endif()
 
+add_service_files(
+  DIRECTORY srv
+  FILES Check.srv SetConfig.srv
+)
+
+generate_messages(
+  DEPENDENCIES
+  geometry_msgs
+  nav_msgs
+)
+
 catkin_package(
   CATKIN_DEPENDS
   roscpp
@@ -31,25 +41,10 @@ catkin_package(
   nav_msgs
 )
 
-add_library(fftwpp
-  include/fftwpp/fftw++.cc include/fftwpp/fftw++.h
-)
-target_link_libraries(fftwpp
-  ${FFTW_LIBRARIES}
-)
-
-add_library(convolution
-  include/fftwpp/convolution.cc include/fftwpp/convolution.h
-)
-target_link_libraries(convolution
-  fftwpp
-)
-
 add_library(collision_checker
   src/collision_checker.cpp include/collision_checker.h
 )
 target_link_libraries(collision_checker
-  convolution
   ${Boost_LIBRARIES}
   ${catkin_LIBRARIES}
 )
