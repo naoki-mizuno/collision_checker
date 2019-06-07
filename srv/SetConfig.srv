@@ -1,0 +1,8 @@
+# Request
+geometry_msgs/Polygon robot
+float64 theta_resolution
+bool allow_unknown
+uint8 occupancy_threshold
+---
+# Response
+# none

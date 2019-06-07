@@ -1,0 +1,6 @@
+# Request
+geometry_msgs/Pose pose
+---
+# Response
+nav_msgs/OccupancyGrid footprint
+bool is_valid

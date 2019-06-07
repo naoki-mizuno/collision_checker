@@ -8,6 +8,7 @@
 !config/
 !launch/
 !cmake/
+!srv/
 # File extensions
 !*.h
 !*.hpp
@@ -15,6 +16,7 @@
 !*.yaml
 !*.launch
 !*.cmake
+!*.srv
 # Files with specific names
 !README.*
 !Makefile
