@@ -43,11 +43,13 @@ public:
     using Canvas = std::vector<std::vector<bool>>;
 
     struct Config {
+        /**
+         * Resolution of yaw angle
+         */
         double theta_resolution = M_PI / 180;
         /**
          * If occupancy is above this threshold, consider cell to be occupied
          */
-
         double occupancy_threshold = 10;
         /**
          * Whether to consider unknown grids as occupied or not
@@ -121,9 +123,23 @@ public:
     bool
     is_valid(const double x, const double y, const double theta);
 
+    /**
+     * Return the robot footprint as a nav_msgs/OccupancyGrid message
+     * Mainly used for visualization.
+     * @param x
+     * @param y
+     * @param theta
+     * @return
+     */
     nav_msgs::OccupancyGrid
     get_footprint(const double x, const double y, const double theta);
 
+    /**
+     * Return the robot footprint as a nav_msgs/OccupancyGrid message
+     * Mainly used for visualization.
+     * @param pose
+     * @return
+     */
     nav_msgs::OccupancyGrid
     get_footprint(const geometry_msgs::Pose& pose);
 
@@ -139,6 +155,13 @@ protected:
 
     Config config_;
 
+    /**
+     * Checks whether the given point is within the given polygon
+     * Reference: https://wrf.ecse.rpi.edu/Research/Short_Notes/pnpoly.html
+     * @param p
+     * @param polygon
+     * @return
+     */
     static
     bool
     point_within_polygon(const geometry_msgs::Point32& p,
@@ -149,9 +172,15 @@ protected:
               const geometry_msgs::Point32& b,
               Canvas& canvas);
 
+    /**
+     * Create robot footprints for all possible thetas (yaw angles)
+     */
     void
     make_footprints();
 
+    /**
+     * Create a robot footprint for the given theta
+     */
     void
     make_footprint(const geometry_msgs::Polygon& robot,
                    const double theta,
@@ -178,6 +207,13 @@ protected:
     quaternion_to_theta(const geometry_msgs::Quaternion& q) const;
 
 private:
+    /**
+     * Find the longest edge in the given robot polygon
+     * Used to determine the size of the canvas big enough to fit the whole
+     * robot
+     * @param robot
+     * @return
+     */
     double
     longest_edge(const geometry_msgs::Polygon& robot) const;
 
