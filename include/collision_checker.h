@@ -77,9 +77,14 @@ public:
     void
     set_grid(const nav_msgs::OccupancyGrid& grid);
 
+    /**
+     * Sets the robot's footprint
+     * @param robot
+     * @param theta_resolution if not given, resolution set via set_config is used
+     */
     void
     set_robot(const geometry_msgs::Polygon& robot,
-              const double theta_resolution = M_PI / 180);
+              const double theta_resolution = 0);
 
     void
     set_config(const Config& config);

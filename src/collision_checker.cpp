@@ -45,12 +45,12 @@ CollisionChecker::set_grid(const nav_msgs::OccupancyGrid& grid) {
 
 void
 CollisionChecker::set_robot(const geometry_msgs::Polygon& robot,
-                            const double theta_resolution /* = M_PI / 180 */) {
+                            const double theta_resolution /* = 0 */) {
     robot_polygon_ = robot;
-    config_.theta_resolution = theta_resolution;
 
     // Create footprints if grid is set
     if (grid_.info.resolution != 0) {
+        config_.theta_resolution = theta_resolution;
         make_footprints();
     }
 }
