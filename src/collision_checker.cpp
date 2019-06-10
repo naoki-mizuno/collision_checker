@@ -128,8 +128,8 @@ CollisionChecker::is_valid(const double x,
         // Number of cells from the bottom-left of the footprint
         const auto c_footprint_x = i % footprint_size_x;
         const auto c_footprint_y = i / footprint_size_x;
-        const auto c_x = c_footprint_x + c_canvas_offset_x;
-        const auto c_y = c_footprint_y + c_canvas_offset_y;
+        const auto c_x = static_cast<int>(c_footprint_x + c_canvas_offset_x);
+        const auto c_y = static_cast<int>(c_footprint_y + c_canvas_offset_y);
 
         // If footprint is not occupied, no need to check
         if (!footprint[c_footprint_x][c_footprint_y]) {
@@ -137,7 +137,9 @@ CollisionChecker::is_valid(const double x,
         }
 
         // If the point in footprint goes out of map, it's invalid
-        if (c_x < 0 || c_y < 0 || c_x >= grid_.info.width || c_y >= grid_.info.height) {
+        if (c_x < 0 || c_y < 0
+            || c_x >= static_cast<int>(grid_.info.width)
+            || c_y >= static_cast<int>(grid_.info.height)) {
             has_collision = true;
         }
         else {
@@ -214,7 +216,7 @@ CollisionChecker::point_within_polygon(const geometry_msgs::Point32& p,
     bool is_inside = false;
 
     // Reference: https://wrf.ecse.rpi.edu/Research/Short_Notes/pnpoly.html
-    for (int i = 0, j = poly.size() - 1; i < poly.size(); j = i++) {
+    for (unsigned i = 0, j = poly.size() - 1; i < poly.size(); j = i++) {
         const auto crossed =
             (
                 (poly[i].y > p.y) != (poly[j].y > p.y)
@@ -401,8 +403,8 @@ CollisionChecker::vizualize(const Canvas& canvas) {
     std::cout << "Res: " << grid_.info.resolution << " m/cell" << std::endl;
     std::cout << std::endl;
 
-    for (int x = 0; x < size_x; x++) {
-        for (int y = 0; y < size_y; y++) {
+    for (unsigned x = 0; x < size_x; x++) {
+        for (unsigned y = 0; y < size_y; y++) {
             const auto occupied = canvas[x][y];
             if (occupied) {
                 std::cout << "O";
